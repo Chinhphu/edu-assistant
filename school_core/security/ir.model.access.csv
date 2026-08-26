@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_school_core_school_core,school_core.school_core,model_school_core_school_core,base.group_user,1,1,1,1
+access_school_class_admin,access.school.class.admin,model_school_class,base.group_user,1,1,1,1
+access_student_profile_admin,access.student.profile.admin,model_student_profile,base.group_user,1,1,1,1

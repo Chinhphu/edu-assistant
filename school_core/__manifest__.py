@@ -17,7 +17,7 @@
     """,
 
     'author': "Lê Tuấn Kiệt",
-    'website': "https://github.com/your-github-link", # Mốt quăng code lên Github thì dẫn link vô đây
+    'website': "https://github.com/Chinhphu/edu-assistant/tree/main/school_core", # Mốt quăng code lên Github thì dẫn link vô đây
 
     'category': 'Education', # Đổi thành Education cho ngầu, lúc cài đặt search chữ Edu là ra
     'version': '1.0',
@@ -27,9 +27,8 @@
 
     'data': [
         # Nhớ mở comment dòng security này ra khi bạn bắt đầu tạo file phân quyền nhé
-        # 'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        'security/ir.model.access.csv',
+        'views/school_views.xml',        
     ],
     
     'demo': [
