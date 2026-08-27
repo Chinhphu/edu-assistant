@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_class_journal_admin,access.class.journal.admin,model_class_journal,base.group_user,1,1,1,1
+access_student_behavior_admin,access.student.behavior.admin,model_student_behavior,base.group_user,1,1,1,1
