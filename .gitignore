@@ -3,3 +3,5 @@ __pycache__/
 .DS_Store
 .vscode/
 *.log
+client_secrets.json
+token.json
