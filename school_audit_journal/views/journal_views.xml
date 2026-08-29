@@ -5,30 +5,20 @@
         <field name="name">class.journal.form</field>
         <field name="model">class.journal</field>
         <field name="arch" type="xml">
-            <form>
-                <!-- Thanh Header: Chứa các nút bấm và thanh trạng thái -->
+            <form string="Nhật ký giảng dạy" class="o_form_view">
                 <header>
-                    <!-- Nút 1: Upload (Chỉ hiện ở bản nháp) -->
-                    <button name="action_process_and_upload" string="1. Upload lên YouTube" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-
-                    <!-- Nút 2: Kéo phụ đề (Chỉ hiện khi đã upload xong) -->
-                    <button name="action_fetch_transcript" string="2. Kéo phụ đề YouTube" type="object" class="oe_highlight" invisible="state != 'waiting_sub'"/>
-
-                    <!-- Nút 3: Gọi AI (Chỉ hiện khi có phụ đề) -->
-                    <button name="action_analyze_ai" string="3. AI Phân tích" type="object" class="oe_highlight" invisible="state not in ('waiting_sub') or not raw_transcript"/>
-                    
-                    <!-- Nút 4: Chốt sổ (Ẩn khi đã chốt) -->
-                    <button name="action_lock_journal" string="Khóa Nhật Ký" type="object" invisible="state == 'locked'" confirm="Bạn có chắc chắn muốn khóa dữ liệu này thành bằng chứng? Thao tác này không thể hoàn tác."/>
-                    
-                    <!-- Thanh trạng thái thể hiện 5 bước -->
-                    <field name="state" widget="statusbar" statusbar_visible="draft,processing,waiting_sub,analyzed,locked"/>
+                            <button name="action_process_and_upload" string="1. Upload lên YouTube" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                            <button name="action_fetch_transcript" string="2. Kéo phụ đề YouTube" type="object" class="oe_highlight" invisible="state != 'waiting_sub'"/>
+                            <button name="action_analyze_ai" string="3. AI Phân tích" type="object" class="oe_highlight" invisible="state not in ('waiting_sub') or not raw_transcript"/>
+                            <button name="action_lock_journal" string="Khóa Nhật Ký" type="object" class="btn-secondary" invisible="state == 'locked'" confirm="Bạn có chắc chắn muốn khóa dữ liệu này thành bằng chứng? Thao tác này không thể hoàn tác."/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,processing,waiting_sub,analyzed,locked"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" string="Tên Tiết Dạy"/>
                         <h1><field name="name" placeholder="VD: Tin học 3A1 - 24/08/2026"/></h1>
                     </div>
-                    
+
                     <group>
                         <!-- Cột trái: Thông tin cơ bản và Đầu vào -->
                         <group string="Thông tin Đầu vào">
@@ -66,6 +56,7 @@
                         <page string="Phụ đề gốc (Transcript)">
                             <field name="raw_transcript" placeholder="Phụ đề YouTube sẽ được kéo về đây..." readonly="state == 'locked'"/>
                         </page>
+
                     </notebook>
                 </sheet>
                 <!-- Chatter: Khung chat và lưu lịch sử -->

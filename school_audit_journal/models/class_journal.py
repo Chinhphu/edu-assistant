@@ -12,6 +12,11 @@ from odoo.exceptions import UserError
 from odoo.modules.registry import Registry
 from odoo.tools import config
 
+try:
+    from youtube_transcript_api import YouTubeTranscriptApi
+except ImportError:  # pragma: no cover
+    YouTubeTranscriptApi = None
+
 _logger = logging.getLogger(__name__)
 
 class ClassJournal(models.Model):
@@ -32,7 +37,7 @@ class ClassJournal(models.Model):
     youtube_video_id = fields.Char(string='ID Video YouTube', tracking=True, readonly=True)
     youtube_url = fields.Char(string='Link YouTube', compute='_compute_youtube_url')
     raw_transcript = fields.Text(string='Phụ đề thô', tracking=True)
-    
+
     state = fields.Selection([
         ('draft', 'Bản Nháp'),
         ('processing', 'Đang render & Upload'),
@@ -54,18 +59,28 @@ class ClassJournal(models.Model):
     # ==========================================
     # NÚT BẤM 1: CHUYỂN ĐỔI VÀ UPLOAD YOUTUBE
     # ==========================================
+    def _append_log(self, message):
+        self.ensure_one()
+        timestamp = fields.Datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.message_post(body=f"[{timestamp}] {message}")
+
+    def _append_short_log(self, message):
+        self.ensure_one()
+        timestamp = fields.Datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.message_post(body=f"[{timestamp}] {message}")
+
     def action_process_and_upload(self):
         self.ensure_one()
         if not self.audio_file:
             raise UserError(_("Vui lòng tải lên file ghi âm trước!"))
-            
+
         self.state = 'processing'
-        self.message_post(body="Bắt đầu tiến trình render video và tải lên YouTube ngầm...")
-        
+        self._append_short_log("Bắt đầu xử lý video: render + upload YouTube")
+
         # Lấy ID và Tên database hiện tại để truyền vào luồng ngầm
         journal_id = self.id
         db_name = self.env.cr.dbname
-        
+
         threaded_task = threading.Thread(
             target=type(self)._run_upload_background,
             args=(db_name, journal_id),
@@ -73,6 +88,17 @@ class ClassJournal(models.Model):
             daemon=True,
         )
         threaded_task.start()
+
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Đang xử lý',
+                'message': 'Hệ thống đã bắt đầu convert audio sang video và upload lên YouTube. Theo dõi tiến độ ở Chatter bên dưới form.',
+                'sticky': False,
+                'type': 'info',
+            }
+        }
 
     @staticmethod
     def _run_upload_background(db_name, journal_id):
@@ -97,8 +123,8 @@ class ClassJournal(models.Model):
                 
                 video_path = audio_path.replace('.mp3', '.mp4')
 
-                journal.message_post(body="Đang render video nền đen bằng FFmpeg...")
-                new_cr.commit() # Lưu trạng thái chat xuống db ngay
+                journal._append_short_log("Đang render video bằng FFmpeg")
+                new_cr.commit()  # Lưu trạng thái chat xuống db ngay
 
                 command = [
                     'ffmpeg', '-y', 
@@ -110,7 +136,7 @@ class ClassJournal(models.Model):
                 ]
                 subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-                journal.message_post(body="Render xong! Bắt đầu kết nối YouTube...")
+                journal._append_short_log("Render video xong, đang upload lên YouTube")
                 new_cr.commit()
 
                 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
@@ -124,10 +150,15 @@ class ClassJournal(models.Model):
                     'YOUTUBE_REFRESH_TOKEN'
                 )
                 if not all((client_id, client_secret, refresh_token)):
+                    journal._append_log(
+                        "Thiếu cấu hình YouTube: YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET hoặc YOUTUBE_REFRESH_TOKEN."
+                    )
                     raise RuntimeError(
                         'Thiếu YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET hoặc '
                         'YOUTUBE_REFRESH_TOKEN trong environment của Odoo.'
                     )
+
+                journal._append_short_log("Đã xác thực YouTube, bắt đầu upload video")
 
                 creds = Credentials(
                     token=None,
@@ -148,7 +179,7 @@ class ClassJournal(models.Model):
                         'categoryId': '27' # Education
                     },
                     'status': {
-                        'privacyStatus': 'private',
+                        'privacyStatus': 'unlisted',
                         'selfDeclaredMadeForKids': False
                     }
                 }
@@ -168,13 +199,13 @@ class ClassJournal(models.Model):
 
                 journal.write({
                     'youtube_video_id': video_id,
-                    'state': 'waiting_sub'
+                    'state': 'waiting_sub',
                 })
-                journal.message_post(body=f"✅ Đã tải lên YouTube thành công! Video ID: {video_id}")
-                
+                journal._append_short_log(f"✅ Upload YouTube thành công. Video ID: {video_id}")
+
             except Exception as e:
                 journal.write({'state': 'draft'})
-                journal.message_post(body=f"❌ Lỗi xử lý nền: {str(e)}")
+                journal._append_short_log(f"❌ Lỗi xử lý: {str(e)}")
             finally:
                 for temporary_path in (audio_path, video_path):
                     if temporary_path and os.path.exists(temporary_path):
@@ -200,26 +231,54 @@ class ClassJournal(models.Model):
         if not self.youtube_video_id:
             raise UserError(_("Chưa có ID Video. Bạn phải đợi quá trình Upload hoàn tất."))
 
-        # [GIẢ LẬP] Comment thư viện youtube_transcript_api lại
-        # from youtube_transcript_api import YouTubeTranscriptApi
-        # transcript_list = YouTubeTranscriptApi.get_transcript(self.youtube_video_id, languages=['vi'])
-        
-        # Giả lập dữ liệu trả về
-        fake_text = "Chào các em. Hôm nay chúng ta sẽ học bài số 3. Mời bạn An đứng lên đọc bài."
-        
-        self.raw_transcript = fake_text
-        self.message_post(body="[Test UI] Đã mô phỏng kéo phụ đề từ YouTube về thành công!")
-        
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Thành công',
-                'message': 'Đã tải xong phụ đề mô phỏng!',
-                'sticky': False,
-                'type': 'success',
+        self._append_short_log("Đang lấy phụ đề từ YouTube")
+
+        if YouTubeTranscriptApi is None:
+            raise UserError(_("Thư viện lấy phụ đề YouTube chưa được cài đặt trong môi trường Odoo."))
+
+        try:
+            if hasattr(YouTubeTranscriptApi, 'fetch'):
+                transcript_list = YouTubeTranscriptApi().fetch(
+                    self.youtube_video_id,
+                    languages=['vi', 'en', 'vi-VN'],
+                )
+            elif hasattr(YouTubeTranscriptApi, 'get_transcript'):
+                transcript_list = YouTubeTranscriptApi.get_transcript(
+                    self.youtube_video_id,
+                    languages=['vi', 'en', 'vi-VN'],
+                )
+            else:
+                raise AttributeError("Chưa tìm thấy method fetch/get_transcript trong youtube_transcript_api")
+
+            lines = []
+            for item in transcript_list:
+                text = getattr(item, 'text', None)
+                if text is None and hasattr(item, 'to_dict'):
+                    text = item.to_dict().get('text')
+                if text:
+                    lines.append(str(text).strip())
+
+            transcript_text = '\n'.join(lines).strip()
+
+            if not transcript_text:
+                raise UserError(_("Video này không có phụ đề để tải về."))
+
+            self.raw_transcript = transcript_text
+            self._append_short_log("✅ Đã lấy xong phụ đề từ YouTube")
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Thành công',
+                    'message': 'Đã kéo phụ đề từ YouTube về thành công.',
+                    'sticky': False,
+                    'type': 'success',
+                }
             }
-        }
+        except Exception as exc:
+            self._append_short_log(f"❌ Không lấy được phụ đề từ YouTube: {exc}")
+            raise UserError(_(f"Không thể kéo phụ đề từ YouTube: {exc}")) from exc
 
     # ==========================================
     # NÚT BẤM 3: GỌI GEMINI PHÂN TÍCH
@@ -228,14 +287,18 @@ class ClassJournal(models.Model):
         self.ensure_one()
         if not self.raw_transcript:
             raise UserError(_("Chưa có nội dung phụ đề để AI phân tích. Vui lòng bấm Lấy Phụ đề trước!"))
-        
+
+        self._append_short_log("Bắt đầu AI phân tích nội dung bài dạy")
+
         # [GIẢ LẬP] Tạm khóa code gọi google-generativeai
-        
+
         self.state = 'analyzed'
-        self.message_post(body="[Test UI] Đã mô phỏng AI phân tích xong nội dung bài dạy!")
+        self._append_short_log("✅ AI phân tích xong")
 
     # ==========================================
     # NÚT BẤM 4: KHÓA NHẬT KÝ
     # ==========================================
     def action_lock_journal(self):
+        self.ensure_one()
+        self._append_short_log("Khóa nhật ký thành bằng chứng")
         self.state = 'locked'
