@@ -100,7 +100,23 @@ class ClassJournal(models.Model):
             raise UserError(_("Thiếu thư viện youtube_transcript_api."))
 
         try:
-            transcript_list = YouTubeTranscriptApi.get_transcript(self.youtube_video_id, languages=['vi', 'en', 'vi-VN'])
+            transcript_api = YouTubeTranscriptApi()
+            fetch_method = getattr(transcript_api, 'fetch', None)
+            get_transcript_method = getattr(YouTubeTranscriptApi, 'get_transcript', None)
+            if callable(fetch_method):
+                transcript_items = fetch_method(
+                    self.youtube_video_id,
+                    languages=['vi', 'en', 'vi-VN'],
+                )
+            elif callable(get_transcript_method):
+                transcript_items = get_transcript_method(
+                    self.youtube_video_id,
+                    languages=['vi', 'en', 'vi-VN'],
+                )
+            else:
+                raise AttributeError(
+                    'Không tìm thấy API fetch hoặc get_transcript trong youtube_transcript_api.'
+                )
             
             def _format_timestamp(seconds):
                 m, s = divmod(max(0, int(float(seconds or 0))), 60)
@@ -108,9 +124,14 @@ class ClassJournal(models.Model):
                 return f"{h:02d}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
 
             lines = []
-            for item in transcript_list:
-                text = item.get('text', '').strip()
-                start = item.get('start')
+            lines = []
+            for item in transcript_items:
+                text = getattr(item, 'text', None)
+                start = getattr(item, 'start', None)
+                if isinstance(item, dict):
+                    text = item.get('text')
+                    start = item.get('start')
+                text = str(text or '').strip()
                 if text:
                     lines.append(f"[{_format_timestamp(start)}] {text}" if start is not None else text)
 
@@ -165,7 +186,10 @@ class ClassJournal(models.Model):
             if not api_key:
                 raise Exception("Chưa cấu hình API key Gemini.")
 
-            client = genai.Client(api_key=api_key, http_options={'timeout': 600.0})
+            client = genai.Client(
+                api_key=api_key,
+                http_options=types.HttpOptions(timeout=600000) if types else None,
+            )
             
             prompt = f"""
 Bạn là trợ lý phân tích giờ học của giáo viên.
