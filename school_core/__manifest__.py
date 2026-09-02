@@ -1,5 +1,6 @@
 {
-    'name': "School Core - Nền Tảng Sư Phạm",
+    'name': "Trợ lý sư phạm",
+    'sequence': 10,
 
     'summary': "Lõi hệ thống quản lý danh mục lớp học và hồ sơ học sinh",
 

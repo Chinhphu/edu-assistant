@@ -7,21 +7,22 @@
         <field name="arch" type="xml">
             <form string="Nhật ký giảng dạy" class="o_form_view">
                 <header>
-                            <button name="action_process_and_upload" string="1. Upload lên YouTube" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-                            <button name="action_fetch_transcript" string="2. Kéo phụ đề YouTube" type="object" class="oe_highlight" invisible="state != 'waiting_sub'"/>
-                            <button name="action_analyze_ai" string="3. AI Phân tích" type="object" class="oe_highlight" invisible="state not in ('waiting_sub') or not raw_transcript"/>
-                            <button name="action_lock_journal" string="Khóa Nhật Ký" type="object" class="btn-secondary" invisible="state == 'locked'" confirm="Bạn có chắc chắn muốn khóa dữ liệu này thành bằng chứng? Thao tác này không thể hoàn tác."/>
+                            <button name="action_process_and_upload" string="1. Upload audio → YouTube" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                            <button name="action_use_existing_youtube_link" string="1B. Dùng link YouTube sẵn" type="object" class="btn-secondary" invisible="state not in ('draft', 'waiting_sub')"/>
+                            <button name="action_fetch_transcript" string="2. Lấy phụ đề" type="object" class="oe_highlight" invisible="state not in ('draft', 'waiting_sub')"/>
+                            <button name="action_analyze_ai" string="3. Phân tích AI" type="object" class="btn-secondary" invisible="state not in ('draft', 'waiting_sub', 'analyzed')"/>
+                            <button name="action_lock_journal" string="Khóa nhật ký" type="object" class="btn-secondary" invisible="state == 'locked'" confirm="Bạn có chắc chắn muốn khóa dữ liệu này thành bằng chứng? Thao tác này không thể hoàn tác."/>
                             <field name="state" widget="statusbar" statusbar_visible="draft,processing,waiting_sub,analyzed,locked"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
-                        <label for="name" class="oe_edit_only" string="Tên Tiết Dạy"/>
+                        <label for="name" class="oe_edit_only" string="Tên bài dạy"/>
                         <h1><field name="name" placeholder="VD: Tin học 3A1 - 24/08/2026"/></h1>
                     </div>
 
                     <group>
-                        <!-- Cột trái: Thông tin cơ bản và Đầu vào -->
-                        <group string="Thông tin Đầu vào">
+                        <!-- Cột trái: Thông tin đầu vào -->
+                        <group string="Thông tin đầu vào">
                             <field name="class_id" options="{'no_create': True}" readonly="state == 'locked'"/>
                             <field name="date" readonly="state == 'locked'"/>
                             
@@ -30,19 +31,21 @@
                             <field name="cover_image" widget="image" options="{'size': [0, 90]}" readonly="state != 'draft'"/>
                         </group>
                         
-                        <!-- Cột phải: Thông tin Đầu ra -->
-                        <group string="Kết nối YouTube">
-                            <field name="youtube_video_id"/>
-                            <field name="youtube_url" widget="url" placeholder="https://youtube.com/watch?v=..."/>
+                        <!-- Cột phải: Video YouTube -->
+                        <group string="Video YouTube">
+                            <field name="youtube_url" widget="url" placeholder="https://youtu.be/... hoặc https://www.youtube.com/watch?v=..." string="Link video YouTube"/>
+                            <field name="youtube_thumbnail_html" string="Preview" nolabel="1" widget="html"/>
+                            <field name="youtube_video_id" string="ID video" invisible="1"/>
                         </group>
                     </group>
                     
                     <notebook>
-                        <!-- Tab 1: Danh sách hành vi -->
-                        <page string="Chi tiết Hành vi (Bằng chứng)">
+                        <!-- Tab 1: Bằng chứng hành vi -->
+                        <page string="Bằng chứng hành vi">
                             <field name="behavior_ids" readonly="state == 'locked'">
                                 <list editable="bottom">
-                                    <field name="student_id"/>
+                                    <field name="student_id" placeholder="Chọn học sinh sau khi xem nhãn AI"/>
+                                    <field name="ai_student_label" readonly="1" string="AI nhận diện"/>
                                     <field name="behavior_type"/>
                                     <field name="display_time" placeholder="14:25"/>
                                     <field name="exact_quote"/>
@@ -53,7 +56,7 @@
                         </page>
                         
                         <!-- Tab 2: Phụ đề -->
-                        <page string="Phụ đề gốc (Transcript)">
+                        <page string="Phụ đề YouTube">
                             <field name="raw_transcript" placeholder="Phụ đề YouTube sẽ được kéo về đây..." readonly="state == 'locked'"/>
                         </page>
 
@@ -87,14 +90,14 @@
 
     <!-- 3. ACTION -->
     <record id="action_class_journal" model="ir.actions.act_window">
-        <field name="name">Nhật ký Giảng dạy</field>
+        <field name="name">Nhật ký giảng dạy</field>
         <field name="res_model">class.journal</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <!-- 4. MENU ITEM -->
     <menuitem id="menu_class_journal" 
-              name="Nhật ký Giảng dạy" 
+              name="Nhật ký giảng dạy" 
               parent="school_core.menu_school_root" 
               action="action_class_journal" 
               sequence="5"/>

@@ -2,24 +2,24 @@ from odoo import models, fields, api
 
 class StudentBehavior(models.Model):
     _name = 'student.behavior'
-    _description = 'Chi tiết hành vi học sinh'
+    _description = 'Bằng chứng hành vi'
 
-    journal_id = fields.Many2one('class.journal', string='Tiết dạy', ondelete='cascade')
+    journal_id = fields.Many2one('class.journal', string='Nhật ký giảng dạy', ondelete='cascade')
     
     # Móc sang school_core
-    student_id = fields.Many2one('student.profile', string='Học sinh', required=True)
+    student_id = fields.Many2one('student.profile', string='Học sinh')
+    ai_student_label = fields.Char(string='Tên AI nhận diện', readonly=True)
     
     behavior_type = fields.Selection([
-        ('tich_cuc', 'Phát biểu / Tích cực'),
-        ('tieu_cuc', 'Gây rối / Mất tập trung'),
+        ('tich_cuc', 'Phát biểu / tích cực'),
+        ('tieu_cuc', 'Gây rối / mất tập trung'),
         ('ky_thuat', 'Lỗi thiết bị')
-    ], string='Phân loại')
+    ], string='Loại hành vi')
     
-    exact_quote = fields.Char(string='Trích dẫn nguyên văn')
-    display_time = fields.Char(string='Thời gian (VD: 14:25)')
-    timestamp_seconds = fields.Integer(string='Giây thứ n')
+    exact_quote = fields.Char(string='Trích dẫn')
+    display_time = fields.Char(string='Thời gian hiển thị')
+    timestamp_seconds = fields.Integer(string='Giây')
 
-    # Vũ khí tối thượng: Tự động nối link YouTube với tham số thời gian
     video_url_at_time = fields.Char(string='Link bằng chứng', compute='_compute_video_url')
 
     @api.depends('journal_id.youtube_url', 'timestamp_seconds')
