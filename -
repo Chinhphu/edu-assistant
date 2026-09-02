@@ -1,0 +1,179 @@
+2026-09-02 12:14:59,258 36812 DEBUG ? odoo.netsvc: logger level set: "odoo.http.rpc.request:INFO" 
+2026-09-02 12:14:59,258 36812 DEBUG ? odoo.netsvc: logger level set: "odoo.http.rpc.response:INFO" 
+2026-09-02 12:14:59,259 36812 DEBUG ? odoo.netsvc: logger level set: ":INFO" 
+2026-09-02 12:14:59,259 36812 DEBUG ? odoo.netsvc: logger level set: "odoo:DEBUG" 
+2026-09-02 12:14:59,259 36812 DEBUG ? odoo.netsvc: logger level set: "odoo.sql_db:INFO" 
+2026-09-02 12:14:59,259 36812 DEBUG ? odoo.netsvc: logger level set: ":INFO" 
+2026-09-02 12:14:59,259 36812 WARNING ? odoo.tools.config: unknown option 'youtube_client_id' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,259 36812 WARNING ? odoo.tools.config: unknown option 'youtube_client_secret' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,259 36812 WARNING ? odoo.tools.config: unknown option 'youtube_refresh_token' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,260 36812 WARNING ? odoo.tools.config: unknown option 'gemini_api_key' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,260 36812 WARNING ? odoo.tools.config: unknown option 'youtube_client_id' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,260 36812 WARNING ? odoo.tools.config: unknown option 'youtube_client_secret' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,260 36812 WARNING ? odoo.tools.config: unknown option 'youtube_refresh_token' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,260 36812 WARNING ? odoo.tools.config: unknown option 'gemini_api_key' in the config file at e:\odoo\server\odoo.conf, option stored as-is, without parsing 
+2026-09-02 12:14:59,262 36812 INFO ? odoo: Odoo version 19.0-20260824 
+2026-09-02 12:14:59,262 36812 INFO ? odoo: Using configuration file at e:\odoo\server\odoo.conf 
+2026-09-02 12:14:59,262 36812 INFO ? odoo: addons paths: _NamespacePath(['E:\\Odoo\\server\\odoo\\addons', 'e:\\odoo_data\\addons\\19.0', 'e:\\app program\\server\\odoo\\addons', 'e:\\odoo_custom_addons', 'e:\\third_party_addons', 'e:\\odoo\\server\\addons']) 
+2026-09-02 12:14:59,262 36812 INFO ? odoo: database: odoo@localhost:5432 
+2026-09-02 12:15:01,380 36812 DEBUG ? odoo.service.server: Setting signal handlers 
+2026-09-02 12:15:01,522 36812 DEBUG test odoo.registry: Multiprocess load registry signaling: [Registry: 52] [Cache default: 6] [Cache assets: 1] [Cache stable: 2] [Cache templates: 1] [Cache routing: 1] [Cache groups: 1] 
+2026-09-02 12:15:01,585 36812 INFO test odoo.modules.loading: loading 1 modules... 
+2026-09-02 12:15:01,585 36812 DEBUG test odoo.modules.loading: Loading module base (1/1) 
+2026-09-02 12:15:01,592 36812 DEBUG test odoo.modules.loading: Module base loaded in 0.01s, 0 queries 
+2026-09-02 12:15:01,593 36812 INFO test odoo.modules.loading: 1 modules loaded in 0.01s, 0 queries (+0 extra) 
+2026-09-02 12:15:01,652 36812 INFO test odoo.modules.loading: updating modules list 
+2026-09-02 12:15:01,660 36812 INFO test odoo.addons.base.models.ir_module: ALLOW access to module.update_list on [] to user __system__ #1 via n/a 
+2026-09-02 12:15:04,399 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_audit_journal', defaulting to '' 
+2026-09-02 12:15:04,400 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_audit_journal', defaulting to LGPL-3 
+2026-09-02 12:15:04,402 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_audit_journal', defaulting to '' 
+2026-09-02 12:15:04,402 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_audit_journal', defaulting to LGPL-3 
+2026-09-02 12:15:04,406 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_core', defaulting to LGPL-3 
+2026-09-02 12:15:04,407 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_core', defaulting to LGPL-3 
+2026-09-02 12:15:04,412 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_media', defaulting to '' 
+2026-09-02 12:15:04,413 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_media', defaulting to LGPL-3 
+2026-09-02 12:15:04,416 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_media', defaulting to '' 
+2026-09-02 12:15:04,417 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_media', defaulting to LGPL-3 
+2026-09-02 12:15:05,354 36812 INFO test odoo.addons.base.models.ir_module: ALLOW access to module.button_upgrade on ['Nhật ký giảng dạy', 'School Media Pipeline'] to user __system__ #1 via n/a 
+2026-09-02 12:15:05,355 36812 INFO test odoo.addons.base.models.ir_module: ALLOW access to module.update_list on ['Nhật ký giảng dạy', 'School Media Pipeline'] to user __system__ #1 via n/a 
+2026-09-02 12:15:07,721 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_audit_journal', defaulting to '' 
+2026-09-02 12:15:07,722 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_audit_journal', defaulting to LGPL-3 
+2026-09-02 12:15:07,725 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_core', defaulting to LGPL-3 
+2026-09-02 12:15:07,726 36812 WARNING test odoo.modules.module: Missing `author` key in manifest for 'school_media', defaulting to '' 
+2026-09-02 12:15:07,726 36812 WARNING test odoo.modules.module: Missing `license` key in manifest for 'school_media', defaulting to LGPL-3 
+2026-09-02 12:15:08,225 36812 INFO test odoo.addons.base.models.ir_module: ALLOW access to module.button_install on [] to user __system__ #1 via n/a 
+2026-09-02 12:15:09,048 36812 DEBUG test odoo.modules.loading: Updating graph with 47 more modules 
+2026-09-02 12:15:09,052 36812 INFO test odoo.modules.loading: loading 48 modules... 
+2026-09-02 12:15:09,053 36812 DEBUG test odoo.modules.loading: Loading module rpc (2/48) 
+2026-09-02 12:15:09,053 36812 DEBUG test odoo.modules.loading: Module rpc loaded in 0.00s, 0 queries 
+2026-09-02 12:15:09,053 36812 DEBUG test odoo.modules.loading: Loading module school_core (3/48) 
+2026-09-02 12:15:09,066 36812 DEBUG test odoo.modules.loading: Module school_core loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,066 36812 DEBUG test odoo.modules.loading: Loading module social_media (4/48) 
+2026-09-02 12:15:09,074 36812 DEBUG test odoo.modules.loading: Module social_media loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,075 36812 DEBUG test odoo.modules.loading: Loading module uom (5/48) 
+2026-09-02 12:15:09,085 36812 DEBUG test odoo.modules.loading: Module uom loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,085 36812 DEBUG test odoo.modules.loading: Loading module web (6/48) 
+2026-09-02 12:15:09,088 36812 DEBUG test odoo.modules.loading: Module web loaded in 0.00s, 0 queries 
+2026-09-02 12:15:09,088 36812 DEBUG test odoo.modules.loading: Loading module api_doc (7/48) 
+2026-09-02 12:15:09,099 36812 DEBUG test odoo.modules.loading: Module api_doc loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,100 36812 DEBUG test odoo.modules.loading: Loading module auth_totp (8/48) 
+2026-09-02 12:15:09,165 36812 DEBUG test odoo.modules.loading: Module auth_totp loaded in 0.07s, 0 queries 
+2026-09-02 12:15:09,165 36812 DEBUG test odoo.modules.loading: Loading module base_import (9/48) 
+2026-09-02 12:15:09,180 36812 DEBUG test odoo.modules.loading: Module base_import loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,180 36812 DEBUG test odoo.modules.loading: Loading module base_import_module (10/48) 
+2026-09-02 12:15:09,197 36812 DEBUG test odoo.modules.loading: Module base_import_module loaded in 0.02s, 0 queries 
+2026-09-02 12:15:09,197 36812 DEBUG test odoo.modules.loading: Loading module base_setup (11/48) 
+2026-09-02 12:15:09,210 36812 DEBUG test odoo.modules.loading: Module base_setup loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,210 36812 DEBUG test odoo.modules.loading: Loading module bus (12/48) 
+2026-09-02 12:15:09,254 36812 DEBUG test odoo.modules.loading: Module bus loaded in 0.04s, 0 queries 
+2026-09-02 12:15:09,255 36812 DEBUG test odoo.modules.loading: Loading module http_routing (13/48) 
+2026-09-02 12:15:09,269 36812 DEBUG test odoo.modules.loading: Module http_routing loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,270 36812 DEBUG test odoo.modules.loading: Loading module resource (14/48) 
+2026-09-02 12:15:09,301 36812 DEBUG test odoo.modules.loading: Module resource loaded in 0.03s, 0 queries 
+2026-09-02 12:15:09,301 36812 DEBUG test odoo.modules.loading: Loading module web_dark_mode (15/48) 
+2026-09-02 12:15:09,318 36812 DEBUG test odoo.modules.loading: Module web_dark_mode loaded in 0.02s, 0 queries 
+2026-09-02 12:15:09,318 36812 DEBUG test odoo.modules.loading: Loading module web_hierarchy (16/48) 
+2026-09-02 12:15:09,328 36812 DEBUG test odoo.modules.loading: Module web_hierarchy loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,330 36812 DEBUG test odoo.modules.loading: Loading module web_tour (17/48) 
+2026-09-02 12:15:09,337 36812 DEBUG test odoo.modules.loading: Module web_tour loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,339 36812 DEBUG test odoo.modules.loading: Loading module auth_passkey (18/48) 
+2026-09-02 12:15:09,503 36812 DEBUG test odoo.modules.loading: Module auth_passkey loaded in 0.16s, 0 queries 
+2026-09-02 12:15:09,503 36812 DEBUG test odoo.modules.loading: Loading module html_editor (19/48) 
+2026-09-02 12:15:09,959 36812 DEBUG test odoo.modules.loading: Module html_editor loaded in 0.46s, 0 queries 
+2026-09-02 12:15:09,959 36812 DEBUG test odoo.modules.loading: Loading module iap (20/48) 
+2026-09-02 12:15:09,959 36812 DEBUG test odoo.modules.loading: Module iap loaded in 0.00s, 0 queries 
+2026-09-02 12:15:09,960 36812 DEBUG test odoo.modules.loading: Loading module mail (21/48) 
+2026-09-02 12:15:09,967 36812 DEBUG test odoo.modules.loading: Module mail loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,967 36812 DEBUG test odoo.modules.loading: Loading module web_unsplash (22/48) 
+2026-09-02 12:15:09,980 36812 DEBUG test odoo.modules.loading: Module web_unsplash loaded in 0.01s, 0 queries 
+2026-09-02 12:15:09,980 36812 DEBUG test odoo.modules.loading: Loading module analytic (23/48) 
+2026-09-02 12:15:09,995 36812 DEBUG test odoo.modules.loading: Module analytic loaded in 0.02s, 0 queries 
+2026-09-02 12:15:09,995 36812 DEBUG test odoo.modules.loading: Loading module auth_signup (24/48) 
+2026-09-02 12:15:10,007 36812 DEBUG test odoo.modules.loading: Module auth_signup loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,007 36812 DEBUG test odoo.modules.loading: Loading module auth_totp_mail (25/48) 
+2026-09-02 12:15:10,021 36812 DEBUG test odoo.modules.loading: Module auth_totp_mail loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,021 36812 DEBUG test odoo.modules.loading: Loading module base_install_request (26/48) 
+2026-09-02 12:15:10,030 36812 DEBUG test odoo.modules.loading: Module base_install_request loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,030 36812 DEBUG test odoo.modules.loading: Loading module contacts (27/48) 
+2026-09-02 12:15:10,038 36812 DEBUG test odoo.modules.loading: Module contacts loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,038 36812 DEBUG test odoo.modules.loading: Loading module gamification (28/48) 
+2026-09-02 12:15:10,066 36812 DEBUG test odoo.modules.loading: Module gamification loaded in 0.03s, 0 queries 
+2026-09-02 12:15:10,067 36812 DEBUG test odoo.modules.loading: Loading module google_gmail (29/48) 
+2026-09-02 12:15:10,091 36812 DEBUG test odoo.modules.loading: Module google_gmail loaded in 0.02s, 0 queries 
+2026-09-02 12:15:10,091 36812 DEBUG test odoo.modules.loading: Loading module html_builder (30/48) 
+2026-09-02 12:15:10,093 36812 DEBUG test odoo.modules.loading: Module html_builder loaded in 0.00s, 0 queries 
+2026-09-02 12:15:10,093 36812 DEBUG test odoo.modules.loading: Loading module iap_mail (31/48) 
+2026-09-02 12:15:10,100 36812 DEBUG test odoo.modules.loading: Module iap_mail loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,101 36812 DEBUG test odoo.modules.loading: Loading module mail_bot (32/48) 
+2026-09-02 12:15:10,118 36812 DEBUG test odoo.modules.loading: Module mail_bot loaded in 0.02s, 0 queries 
+2026-09-02 12:15:10,118 36812 DEBUG test odoo.modules.loading: Loading module microsoft_outlook (33/48) 
+2026-09-02 12:15:10,139 36812 DEBUG test odoo.modules.loading: Module microsoft_outlook loaded in 0.02s, 0 queries 
+2026-09-02 12:15:10,139 36812 DEBUG test odoo.modules.loading: Loading module phone_validation (34/48) 
+2026-09-02 12:15:10,291 36812 DEBUG test odoo.modules.loading: Module phone_validation loaded in 0.15s, 0 queries 
+2026-09-02 12:15:10,292 36812 DEBUG test odoo.modules.loading: Loading module privacy_lookup (35/48) 
+2026-09-02 12:15:10,304 36812 DEBUG test odoo.modules.loading: Module privacy_lookup loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,304 36812 DEBUG test odoo.modules.loading: Loading module rating (36/48) 
+2026-09-02 12:15:10,379 36812 DEBUG test odoo.modules.loading: Module rating loaded in 0.07s, 0 queries 
+2026-09-02 12:15:10,380 36812 DEBUG test odoo.modules.loading: Loading module resource_mail (37/48) 
+2026-09-02 12:15:10,390 36812 DEBUG test odoo.modules.loading: Module resource_mail loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,391 36812 INFO test odoo.modules.loading: Loading module school_media (38/48) 
+2026-09-02 12:15:10,462 36812 DEBUG test odoo.registry: Patching res.config.settings.report_footer with translate=True 
+2026-09-02 12:15:10,474 36812 DEBUG test odoo.registry: Patching base.document.layout.report_header with translate=True 
+2026-09-02 12:15:10,474 36812 DEBUG test odoo.registry: Patching base.document.layout.report_footer with translate=True 
+2026-09-02 12:15:10,474 36812 DEBUG test odoo.registry: Patching base.document.layout.company_details with translate=True 
+2026-09-02 12:15:10,482 36812 DEBUG test odoo.registry: Patching iap.account.description with translate=True 
+2026-09-02 12:15:10,504 36812 DEBUG test odoo.registry: Patching gamification.badge.user.badge_name with translate=True 
+2026-09-02 12:15:10,505 36812 DEBUG test odoo.registry: Patching gamification.challenge.line.name with translate=True 
+2026-09-02 12:15:10,505 36812 DEBUG test odoo.registry: Patching gamification.challenge.line.definition_suffix with translate=True 
+2026-09-02 12:15:10,590 36812 INFO test odoo.registry: module school_media: creating or updating database tables 
+2026-09-02 12:15:10,737 36812 INFO test odoo.modules.loading: loading school_media/security/ir.model.access.csv 
+2026-09-02 12:15:10,763 36812 DEBUG test odoo.registry: Invalidating stable model caches from call_cache_clearing_methods E:\Odoo\server\odoo\addons\base\models\ir_model.py:2200 
+2026-09-02 12:15:10,776 36812 INFO test odoo.addons.base.models.ir_module: module school_media: no translation for language vi_VN 
+2026-09-02 12:15:10,787 36812 INFO test odoo.modules.loading: Module school_media loaded in 0.40s, 46 queries (+46 other) 
+2026-09-02 12:15:10,787 36812 DEBUG test odoo.modules.loading: Loading module web_responsive (39/48) 
+2026-09-02 12:15:10,800 36812 DEBUG test odoo.modules.loading: Module web_responsive loaded in 0.01s, 0 queries 
+2026-09-02 12:15:10,800 36812 DEBUG test odoo.modules.loading: Loading module partner_autocomplete (40/48) 
+2026-09-02 12:15:10,852 36812 DEBUG test odoo.modules.loading: Module partner_autocomplete loaded in 0.05s, 0 queries 
+2026-09-02 12:15:10,853 36812 DEBUG test odoo.modules.loading: Loading module portal (41/48) 
+2026-09-02 12:15:10,854 36812 DEBUG test odoo.modules.loading: Module portal loaded in 0.00s, 0 queries 
+2026-09-02 12:15:10,854 36812 INFO test odoo.modules.loading: Loading module school_audit_journal (42/48) 
+2026-09-02 12:15:10,875 36812 DEBUG test odoo.registry: Patching res.config.settings.report_footer with translate=True 
+2026-09-02 12:15:10,885 36812 DEBUG test odoo.registry: Patching iap.account.description with translate=True 
+2026-09-02 12:15:10,893 36812 DEBUG test odoo.registry: Patching gamification.badge.user.badge_name with translate=True 
+2026-09-02 12:15:12,418 36812 WARNING test odoo.modules.loading: Transient module states were reset 
+2026-09-02 12:15:12,419 36812 ERROR test odoo.registry: Failed to load registry 
+2026-09-02 12:15:12,420 36812 CRITICAL test odoo.service.server: Failed to initialize database `test`. 
+Traceback (most recent call last):
+  File "E:\Odoo\server\odoo\service\server.py", line 1585, in preload_registries
+    registry = Registry.new(dbname, update_module=update_module, install_modules=config['init'], upgrade_modules=config['update'], reinit_modules=config['reinit'])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Odoo\server\odoo\tools\func.py", line 88, in locked
+    return func(inst, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Odoo\server\odoo\orm\registry.py", line 189, in new
+    load_modules(
+  File "E:\Odoo\server\odoo\modules\loading.py", line 464, in load_modules
+    load_module_graph(
+  File "E:\Odoo\server\odoo\modules\loading.py", line 193, in load_module_graph
+    registry._setup_models__(env.cr, [])  # incremental setup
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Odoo\server\odoo\tools\func.py", line 88, in locked
+    return func(inst, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Odoo\server\odoo\orm\registry.py", line 508, in _setup_models__
+    model_classes.setup_model_classes(env)
+  File "E:\Odoo\server\odoo\orm\model_classes.py", line 316, in setup_model_classes
+    _prepare_setup(model_cls)
+  File "E:\Odoo\server\odoo\orm\model_classes.py", line 337, in _prepare_setup
+    model_cls.__bases__ = model_cls._base_classes__
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: Cannot create a consistent method resolution
+order (MRO) for bases Model, mail.thread, school.media.asset, base
+2026-09-02 12:15:12,428 36812 INFO test odoo.service.server: Initiating shutdown 
+2026-09-02 12:15:12,428 36812 INFO test odoo.service.server: Hit CTRL-C again or send a second signal to force the shutdown. 
+2026-09-02 12:15:12,428 36812 DEBUG test odoo.service.server: on_close call <bound method Event.set of <threading.Event at 0x252ceae32f0: unset>> 
+2026-09-02 12:15:12,428 36812 DEBUG test odoo.service.server: on_close call <function _kick_all at 0x00000252CD2DC540> 
+2026-09-02 12:15:12,428 36812 DEBUG test odoo.service.server: current thread: <_MainThread(MainThread, started 41204)> 
+2026-09-02 12:15:12,428 36812 DEBUG test odoo.service.server: process <_MainThread(MainThread, started 41204)> (False) 
+2026-09-02 12:15:12,428 36812 INFO test odoo.sql_db: ConnectionPool(read/write;used=0/count=0/max=64): Closed 1 connections  
+2026-09-02 12:15:12,467 36812 DEBUG test odoo.service.server: -- 

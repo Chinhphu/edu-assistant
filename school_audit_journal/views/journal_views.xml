@@ -8,9 +8,9 @@
             <form string="Nhật ký giảng dạy" class="o_form_view">
                 <header>
                             <button name="action_process_and_upload" string="1. Upload audio → YouTube" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-                            <button name="action_use_existing_youtube_link" string="1B. Dùng link YouTube sẵn" type="object" class="btn-secondary" invisible="state not in ('draft', 'waiting_sub')"/>
-                            <button name="action_fetch_transcript" string="2. Lấy phụ đề" type="object" class="oe_highlight" invisible="state not in ('draft', 'waiting_sub')"/>
-                            <button name="action_analyze_ai" string="3. Phân tích AI" type="object" class="btn-secondary" invisible="state not in ('draft', 'waiting_sub', 'analyzed')"/>
+                            <button name="action_use_existing_youtube_link" string="1B. Dùng link YouTube sẵn" type="object" class="btn-secondary" invisible="state != 'draft'"/>
+                            <button name="action_fetch_transcript" string="2. Lấy phụ đề" type="object" class="oe_highlight" invisible="state != 'waiting_sub'"/>
+                            <button name="action_analyze_ai" string="3. Phân tích AI" type="object" class="btn-secondary" invisible="state != 'analyzed'"/>
                             <button name="action_lock_journal" string="Khóa nhật ký" type="object" class="btn-secondary" invisible="state == 'locked'" confirm="Bạn có chắc chắn muốn khóa dữ liệu này thành bằng chứng? Thao tác này không thể hoàn tác."/>
                             <field name="state" widget="statusbar" statusbar_visible="draft,processing,waiting_sub,analyzed,locked"/>
                 </header>
