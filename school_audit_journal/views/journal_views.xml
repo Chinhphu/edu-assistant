@@ -17,7 +17,7 @@
                 <sheet>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" string="Tên bài dạy"/>
-                        <h1><field name="name" placeholder="VD: Tin học 3A1 - 24/08/2026"/></h1>
+                        <h1><field name="name" placeholder="VD: Tin học 3/1 - 24/08/2026"/></h1>
                     </div>
 
                     <group>

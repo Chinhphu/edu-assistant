@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_school_media_upload_wizard_form" model="ir.ui.view">
+        <field name="name">school.media.upload.wizard.form</field>
+        <field name="model">school.media.upload.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Upload audio lên YouTube">
+                <group>
+                    <field name="name"/>
+                    <field name="audio_file" filename="audio_filename"/>
+                    <field name="audio_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_upload" string="Upload lên YouTube" type="object" class="oe_highlight"/>
+                    <button string="Hủy" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_school_media_upload_wizard" model="ir.actions.act_window">
+        <field name="name">Upload audio lên YouTube</field>
+        <field name="res_model">school.media.upload.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_school_media_upload" name="Upload audio YouTube" action="action_school_media_upload_wizard" sequence="10"/>
+</odoo>

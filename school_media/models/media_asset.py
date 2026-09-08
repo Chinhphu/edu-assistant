@@ -128,6 +128,91 @@ class SchoolMediaAsset(models.AbstractModel):
     def _media_upload_failure_values(self):
         return {'media_state': 'draft'}
 
+    @staticmethod
+    def _get_youtube_credentials():
+        Request = getattr(import_module('google.auth.transport.requests'), 'Request')
+        Credentials = getattr(import_module('google.oauth2.credentials'), 'Credentials')
+
+        client_id = config.get('youtube_client_id') or os.environ.get('YOUTUBE_CLIENT_ID')
+        client_secret = config.get('youtube_client_secret') or os.environ.get('YOUTUBE_CLIENT_SECRET')
+        refresh_token = config.get('youtube_refresh_token') or os.environ.get('YOUTUBE_REFRESH_TOKEN')
+        if not all((client_id, client_secret, refresh_token)):
+            raise RuntimeError('Thiếu cấu hình YouTube trong odoo.conf hoặc biến môi trường.')
+
+        credentials = Credentials(
+            token=None,
+            refresh_token=refresh_token,
+            token_uri='https://oauth2.googleapis.com/token',
+            client_id=client_id,
+            client_secret=client_secret,
+            scopes=['https://www.googleapis.com/auth/youtube.upload'],
+        )
+        try:
+            credentials.refresh(Request())
+        except Exception as exc:
+            if 'invalid_grant' in str(exc):
+                raise RuntimeError(
+                    'Refresh token YouTube đã hết hạn hoặc bị thu hồi. '
+                    'Hãy cấp lại OAuth token rồi cập nhật YOUTUBE_REFRESH_TOKEN.'
+                ) from exc
+            raise
+        return credentials
+
+    @staticmethod
+    def _upload_audio_bytes_to_youtube(audio_data, title, audio_suffix='.mp3'):
+        build = getattr(import_module('googleapiclient.discovery'), 'build')
+        MediaFileUpload = getattr(import_module('googleapiclient.http'), 'MediaFileUpload')
+        audio_path = video_path = None
+
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=audio_suffix) as temp_audio:
+                temp_audio.write(audio_data)
+                audio_path = temp_audio.name
+            video_path = os.path.splitext(audio_path)[0] + '.mp4'
+
+            subprocess.run([
+                'ffmpeg', '-y', '-f', 'lavfi', '-i', 'color=c=black:s=1280x720:r=1', '-i', audio_path,
+                '-c:v', 'libx264', '-preset', 'ultrafast', '-c:a', 'aac', '-shortest', video_path,
+            ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            creds = SchoolMediaAsset._get_youtube_credentials()
+            youtube = build('youtube', 'v3', credentials=creds)
+            media = MediaFileUpload(video_path, chunksize=8 * 1024 * 1024, resumable=True)
+            try:
+                response = youtube.videos().insert(
+                    part='snippet,status',
+                    body={
+                        'snippet': {
+                            'title': title or 'Audio upload từ Odoo',
+                            'description': 'Tự động tải lên từ Odoo.',
+                            'categoryId': '27',
+                        },
+                        'status': {
+                            'privacyStatus': 'unlisted',
+                            'selfDeclaredMadeForKids': False,
+                        },
+                    },
+                    media_body=media,
+                ).execute()
+            finally:
+                media_file = getattr(media, '_fd', None)
+                if media_file and not media_file.closed:
+                    media_file.close()
+
+            video_id = response.get('id')
+            if not video_id:
+                raise RuntimeError('YouTube không trả về ID video sau khi upload.')
+            return f'https://www.youtube.com/watch?v={video_id}'
+        finally:
+            for temporary_path in (audio_path, video_path):
+                if temporary_path and os.path.exists(temporary_path):
+                    for _ in range(5):
+                        try:
+                            os.remove(temporary_path)
+                            break
+                        except PermissionError:
+                            time.sleep(0.2)
+
     def action_process_and_upload(self):
         self.ensure_one()
         if not self.audio_file:
@@ -150,8 +235,6 @@ class SchoolMediaAsset(models.AbstractModel):
 
     @staticmethod
     def _run_upload_background(model_name, db_name, asset_id):
-        Request = getattr(import_module('google.auth.transport.requests'), 'Request')
-        Credentials = getattr(import_module('google.oauth2.credentials'), 'Credentials')
         build = getattr(import_module('googleapiclient.discovery'), 'build')
         MediaFileUpload = getattr(import_module('googleapiclient.http'), 'MediaFileUpload')
         audio_path = video_path = None
@@ -177,18 +260,7 @@ class SchoolMediaAsset(models.AbstractModel):
                 asset._append_log('Render xong, bắt đầu upload lên YouTube')
                 cr.commit()
                 
-                client_id = config.get('youtube_client_id') or os.environ.get('YOUTUBE_CLIENT_ID')
-                client_secret = config.get('youtube_client_secret') or os.environ.get('YOUTUBE_CLIENT_SECRET')
-                refresh_token = config.get('youtube_refresh_token') or os.environ.get('YOUTUBE_REFRESH_TOKEN')
-                
-                if not all((client_id, client_secret, refresh_token)):
-                    raise RuntimeError('Thiếu cấu hình YouTube trong odoo.conf.')
-
-                creds = Credentials(
-                    token=None, refresh_token=refresh_token, token_uri='https://oauth2.googleapis.com/token',
-                    client_id=client_id, client_secret=client_secret, scopes=['https://www.googleapis.com/auth/youtube.upload'],
-                )
-                creds.refresh(Request())
+                creds = SchoolMediaAsset._get_youtube_credentials()
                 youtube = build('youtube', 'v3', credentials=creds)
                 media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
                 
