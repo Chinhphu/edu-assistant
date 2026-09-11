@@ -1,6 +1,6 @@
 {
     'name': "Trợ lý sư phạm",
-    'sequence': 10,
+    'sequence': 2,
 
     'summary': "Lõi hệ thống quản lý danh mục lớp học và hồ sơ học sinh",
 
@@ -27,6 +27,7 @@
     'depends': ['base'],
 
     'data': [
+        'data/student_sequence.xml',
         # Nhớ mở comment dòng security này ra khi bạn bắt đầu tạo file phân quyền nhé
         'security/ir.model.access.csv',
         'views/school_views.xml',        

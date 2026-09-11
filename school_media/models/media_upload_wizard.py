@@ -1,5 +1,6 @@
 import base64
 import logging
+import os
 import threading
 
 from odoo import SUPERUSER_ID, _, api, fields, models
@@ -15,31 +16,32 @@ class SchoolMediaUploadWizard(models.TransientModel):
     _description = 'Upload audio lên YouTube'
 
     name = fields.Char(string='Tiêu đề video', required=True, default='Audio upload từ Odoo')
-    audio_file = fields.Binary(string='File âm thanh', required=True)
-    audio_filename = fields.Char(string='Tên file')
+    audio_file = fields.Binary(string='File ghi âm', attachment=False, required=True)
+    audio_filename = fields.Char(string='Tên file ghi âm')
 
     @staticmethod
-    def _upload_in_background(db_name, audio_data, title, audio_suffix):
+    def _upload_in_background(db_name, wizard_id):
         with Registry(db_name).cursor() as cr:
             try:
                 env = Environment(cr, SUPERUSER_ID, {})
+                wizard = env['school.media.upload.wizard'].browse(wizard_id)
+                audio_data = base64.b64decode(wizard.audio_file)
+                audio_suffix = os.path.splitext(wizard.audio_filename or '')[1] or '.mp3'
                 video_url = env['school.media.asset']._upload_audio_bytes_to_youtube(
-                    audio_data, title, audio_suffix
+                    audio_data, wizard.name, audio_suffix
                 )
+                wizard.write({'audio_file': False, 'audio_filename': False})
                 _logger.info('Upload audio độc lập lên YouTube thành công: %s', video_url)
             except Exception:
+                wizard = env['school.media.upload.wizard'].browse(wizard_id)
+                wizard.write({'audio_file': False, 'audio_filename': False})
                 _logger.exception('Upload audio độc lập lên YouTube thất bại')
 
     def action_upload(self):
         self.ensure_one()
-        if not self.audio_file:
-            raise UserError(_('Vui lòng chọn file âm thanh.'))
-
-        audio_data = base64.b64decode(self.audio_file)
-        audio_suffix = '.' + self.audio_filename.rsplit('.', 1)[-1] if self.audio_filename and '.' in self.audio_filename else '.mp3'
         threading.Thread(
             target=type(self)._upload_in_background,
-            args=(self.env.cr.dbname, audio_data, self.name, audio_suffix),
+            args=(self.env.cr.dbname, self.id),
             name='standalone-youtube-upload',
             daemon=True,
         ).start()

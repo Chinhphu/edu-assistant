@@ -22,8 +22,12 @@ class SchoolMediaAsset(models.AbstractModel):
     _description = 'Media Asset Mixin (Audio to YouTube)'
 
     # Các trường Media xài chung
-    audio_file = fields.Binary(string='File ghi âm')
+    audio_file = fields.Binary(string='File ghi âm', attachment=False)
     audio_filename = fields.Char(string='Tên file ghi âm')
+    audio_source_filename = fields.Char(
+        string='Tên file trong Google Drive',
+        help='Tên file tương đối bên trong thư mục media_audio_directory trong odoo.conf.',
+    )
     cover_image = fields.Binary(string='Ảnh bìa video')
     
     youtube_video_id = fields.Char(string='ID video YouTube', tracking=True)
@@ -123,10 +127,50 @@ class SchoolMediaAsset(models.AbstractModel):
 
     # Hook functions để các class con (như class_journal) có thể override
     def _media_upload_success_values(self, video_id, youtube_url):
-        return {'youtube_video_id': video_id, 'youtube_url': youtube_url, 'media_state': 'ready'}
+        return {
+            'youtube_video_id': video_id,
+            'youtube_url': youtube_url,
+            'media_state': 'ready',
+            'audio_file': False,
+        }
 
     def _media_upload_failure_values(self):
-        return {'media_state': 'draft'}
+        return {'media_state': 'draft', 'audio_file': False, 'audio_filename': False}
+
+    @staticmethod
+    def _get_audio_directory():
+        return config.get('media_audio_directory') or os.environ.get('MEDIA_AUDIO_DIRECTORY')
+
+    @classmethod
+    def _read_audio_from_directory(cls, source_filename):
+        source_filename = (source_filename or '').strip()
+        audio_directory = cls._get_audio_directory()
+        if not source_filename:
+            raise UserError(_('Vui lòng nhập tên file ghi âm trong Google Drive.'))
+        if not audio_directory:
+            raise UserError(_('Chưa cấu hình media_audio_directory trong odoo.conf.'))
+
+        root_path = os.path.abspath(os.path.expandvars(os.path.expanduser(audio_directory)))
+        source_path = os.path.abspath(os.path.join(root_path, source_filename))
+        try:
+            if os.path.commonpath((root_path, source_path)) != root_path:
+                raise UserError(_('Tên file ghi âm phải nằm trong thư mục Google Drive đã cấu hình.'))
+        except ValueError as exc:
+            raise UserError(_('Đường dẫn file ghi âm không hợp lệ.')) from exc
+
+        if not os.path.isfile(source_path):
+            raise UserError(_('Không tìm thấy file ghi âm: %s') % source_filename)
+        suffix = os.path.splitext(source_path)[1] or '.mp3'
+        with open(source_path, 'rb') as source_file:
+            return source_file.read(), suffix
+
+    def _get_audio_input(self):
+        self.ensure_one()
+        if self.audio_file:
+            audio_data = base64.b64decode(self.audio_file)
+            audio_suffix = os.path.splitext(self.audio_filename or '')[1] or '.mp3'
+            return audio_data, audio_suffix
+        return type(self)._read_audio_from_directory(self.audio_source_filename)
 
     @staticmethod
     def _get_youtube_credentials():
@@ -215,8 +259,7 @@ class SchoolMediaAsset(models.AbstractModel):
 
     def action_process_and_upload(self):
         self.ensure_one()
-        if not self.audio_file:
-            raise UserError(_('Vui lòng tải lên file ghi âm trước khi upload.'))
+        self._get_audio_input()
         self.media_state = 'processing'
         self._append_log('Bắt đầu render video và upload YouTube (chạy ngầm)')
         
@@ -243,11 +286,11 @@ class SchoolMediaAsset(models.AbstractModel):
             env = api.Environment(cr, SUPERUSER_ID, {})
             asset = env[model_name].browse(asset_id)
             try:
-                audio_data = base64.b64decode(asset.audio_file)
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_audio:
+                audio_data, audio_suffix = asset._get_audio_input()
+                with tempfile.NamedTemporaryFile(delete=False, suffix=audio_suffix) as temp_audio:
                     temp_audio.write(audio_data)
                     audio_path = temp_audio.name
-                video_path = audio_path.replace('.mp3', '.mp4')
+                video_path = os.path.splitext(audio_path)[0] + '.mp4'
                 
                 asset._append_log('Đang render video bằng FFmpeg')
                 cr.commit()

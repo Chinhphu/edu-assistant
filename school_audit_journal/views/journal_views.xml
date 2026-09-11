@@ -26,8 +26,8 @@
                             <field name="class_id" options="{'no_create': True}" readonly="state == 'locked'"/>
                             <field name="date" readonly="state == 'locked'"/>
                             
+                            <field name="audio_file" filename="audio_filename" readonly="state != 'draft'"/>
                             <field name="audio_filename" invisible="1"/>
-                            <field name="audio_file" filename="audio_filename" widget="binary" readonly="state != 'draft'"/>
                             <field name="cover_image" widget="image" options="{'size': [0, 90]}" readonly="state != 'draft'"/>
                         </group>
                         

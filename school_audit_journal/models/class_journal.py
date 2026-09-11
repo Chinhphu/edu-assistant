@@ -26,6 +26,7 @@ _logger = logging.getLogger(__name__)
 class ClassJournal(models.Model):
     _name = 'class.journal'
     _description = 'Nhật ký giảng dạy'
+    _order = 'id desc'
     
     # 🌟 ĐÂY LÀ ĐIỂM ĂN TIỀN: Kế thừa AbstractModel ở đây!
     _inherit = ['mail.thread', 'school.media.asset']
@@ -52,6 +53,7 @@ class ClassJournal(models.Model):
     # ==========================================
     def action_process_and_upload(self):
         """Override nút Upload để đổi trạng thái của Journal"""
+        self._get_audio_input()
         self.state = 'processing'
         return super().action_process_and_upload()
 

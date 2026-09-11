@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_student_profile" model="ir.sequence">
+        <field name="name">Mã học sinh</field>
+        <field name="code">student.profile</field>
+        <field name="prefix">HS</field>
+        <field name="padding">6</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

@@ -14,6 +14,182 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <record id="view_student_profile_list" model="ir.ui.view">
+        <field name="name">student.profile.list</field>
+        <field name="model">student.profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="student_code"/>
+                <field name="name"/>
+                <field name="class_id"/>
+                <field name="dob"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_profile_form" model="ir.ui.view">
+        <field name="name">student.profile.form</field>
+        <field name="model">student.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="student_code"/>
+                        <field name="class_id"/>
+                        <field name="dob"/>
+                        <field name="user_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Dữ liệu khảo sát">
+                            <field name="attribute_ids">
+                                <list>
+                                    <field name="category_id"/>
+                                    <field name="raw_value"/>
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                    <field name="recorded_date"/>
+                                    <field name="source"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_category_list" model="ir.ui.view">
+        <field name="name">student.attribute.category.list</field>
+        <field name="model">student.attribute.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="value_type"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_category_form" model="ir.ui.view">
+        <field name="name">student.attribute.category.form</field>
+        <field name="model">student.attribute.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="value_type"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_tag_list" model="ir.ui.view">
+        <field name="name">student.attribute.tag.list</field>
+        <field name="model">student.attribute.tag</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="status"/>
+                <field name="origin"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_tag_form" model="ir.ui.view">
+        <field name="name">student.attribute.tag.form</field>
+        <field name="model">student.attribute.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="category_id"/>
+                        <field name="status"/>
+                        <field name="origin"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_list" model="ir.ui.view">
+        <field name="name">student.attribute.list</field>
+        <field name="model">student.attribute</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button name="action_generate_candidate_tags" type="object" string="Gọi Gemini cho các dòng đã chọn" class="oe_highlight"/>
+                </header>
+                <field name="student_id"/>
+                <field name="category_id"/>
+                <field name="raw_value"/>
+                <field name="tag_ids" widget="many2many_tags"/>
+                <field name="ai_status"/>
+                <field name="recorded_date"/>
+                <field name="source"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_student_attribute_form" model="ir.ui.view">
+        <field name="name">student.attribute.form</field>
+        <field name="model">student.attribute</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="student_id"/>
+                        <field name="category_id"/>
+                        <field name="recorded_date"/>
+                        <field name="source"/>
+                    </group>
+                    <field name="raw_value"/>
+                    <group string="Phân tích sau khi nhập">
+                        <field name="ai_status" readonly="1"/>
+                        <field name="ai_error" readonly="1" invisible="not ai_error"/>
+                        <button name="action_generate_candidate_tags" type="object" string="Gọi Gemini đề xuất nhãn" class="oe_highlight"/>
+                    </group>
+                    <group string="Chuẩn hóa sau">
+                        <field name="candidate_tag_ids" widget="many2many_tags"/>
+                        <button name="action_approve_candidate_tags" type="object" string="Duyệt nhãn đề xuất" class="oe_highlight"/>
+                        <button name="action_clear_candidate_tags" type="object" string="Xóa nhãn đề xuất"/>
+                    </group>
+                    <field name="tag_ids" widget="many2many_tags"/>
+                    <field name="note"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_student_attribute" model="ir.actions.act_window">
+        <field name="name">Dữ liệu khảo sát</field>
+        <field name="res_model">student.attribute</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_student_attribute_category" model="ir.actions.act_window">
+        <field name="name">Chủ đề khảo sát</field>
+        <field name="res_model">student.attribute.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_student_attribute_tag" model="ir.actions.act_window">
+        <field name="name">Nhãn chuẩn hóa</field>
+        <field name="res_model">student.attribute.tag</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
     <!-- 3. Khai báo Menu -->
     <!-- Menu cha ngoài cùng (Root Menu) -->
     <menuitem id="menu_school_root" name="Trợ lý Sư phạm" sequence="10"/>
@@ -21,4 +197,7 @@
     <!-- Menu con (Chứa Lớp học và Học sinh) -->
     <menuitem id="menu_school_class" name="Lớp Học" parent="menu_school_root" action="action_school_class" sequence="10"/>
     <menuitem id="menu_student_profile" name="Học Sinh" parent="menu_school_root" action="action_student_profile" sequence="20"/>
+    <menuitem id="menu_student_attribute" name="Khảo sát" parent="menu_school_root" action="action_student_attribute" sequence="30"/>
+    <menuitem id="menu_student_attribute_category" name="Chủ đề khảo sát" parent="menu_school_root" action="action_student_attribute_category" sequence="40"/>
+    <menuitem id="menu_student_attribute_tag" name="Nhãn chuẩn hóa" parent="menu_school_root" action="action_student_attribute_tag" sequence="50"/>
 </odoo>
